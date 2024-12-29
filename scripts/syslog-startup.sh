@@ -9,10 +9,8 @@ systemctl enable httpd
 yum install -y rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
-#forward logs to central log server
+#centralized logging
 nano /etc/rsyslog.conf
-*.* @{module.syslog.aws_instance.syslog_server.private_ip}:514
-*.* @@{module.syslog.aws_instance.syslog_server.private_ip}:514
 systemctl restart rsyslog
 
 # Get the IMDSv2 token
@@ -33,7 +31,7 @@ echo "
 <!doctype html>
 <html lang=\"en\" class=\"h-100\">
 <head>
-<title>Backend ASG Details</title>
+<title>Syslogger</title>
 </head>
 <body>
 <div>

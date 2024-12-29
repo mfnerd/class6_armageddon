@@ -44,10 +44,10 @@ resource "aws_ec2_transit_gateway_route" "main" {
   destination_cidr_block         = "10.0.0.0/8"
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.main.id
   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_peering_attachment.main.id
-  
-  depends_on = [ aws_ec2_transit_gateway_peering_attachment.tokyo, aws_ec2_transit_gateway_peering_attachment_accepter.main, 
-  data.aws_ec2_transit_gateway_peering_attachment.main
-   ]
+
+  depends_on = [aws_ec2_transit_gateway_peering_attachment.tokyo, aws_ec2_transit_gateway_peering_attachment_accepter.main,
+    data.aws_ec2_transit_gateway_peering_attachment.main
+  ]
 }
 
 
