@@ -9,11 +9,13 @@ systemctl enable httpd
 yum install -y rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
-#forward logs to central log server
+#centralized logging
 nano /etc/rsyslog.conf
-*.* @{module.syslog.aws_instance.syslog_server.private_ip}:514
-*.* @@{module.syslog.aws_instance.syslog_server.private_ip}:514
+echo "*.* @${aws_instance.syslog_osaka.private_ip}:514" >> /etc/rsyslog.conf
+echo "*.* @${aws_instance.syslog_tokyo.private_ip}:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
+
+
 
 # Get the IMDSv2 token
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")

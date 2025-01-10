@@ -13,6 +13,9 @@ systemctl enable rsyslog
 nano /etc/rsyslog.conf
 systemctl restart rsyslog
 
+
+
+
 # Get the IMDSv2 token
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 
@@ -31,7 +34,7 @@ echo "
 <!doctype html>
 <html lang=\"en\" class=\"h-100\">
 <head>
-<title>Syslogger</title>
+<title>Syslog Server Details</title>
 </head>
 <body>
 <div>

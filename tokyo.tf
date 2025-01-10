@@ -45,3 +45,43 @@ module "tgw_hq" {
   vpc_id             = module.tokyo_network.vpc_id
   private_subnet_ids = module.tokyo_network.private_subnet_ids
 }
+#setup a centralized logging server
+resource "aws_security_group" "tokyo_syslog_sg" {
+  provider = aws.tokyo
+  vpc_id   = module.tokyo_network.vpc_id
+
+  ingress {
+    from_port   = 514
+    to_port     = 514
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "syslog-sg"
+  }
+}
+
+resource "aws_instance" "syslog_tokyo" {
+  provider = aws.tokyo
+
+  ami                    = "ami-08f52b2e87cebadd9"
+  instance_type          = "t2.micro"
+  subnet_id              = module.tokyo_network.private_subnet_ids[0]
+  vpc_security_group_ids = [aws_security_group.tokyo_syslog_sg.id]
+  user_data              = file("./scripts/syslogger.sh")
+  tags = {
+    Name = "syslog"
+  }
+}
+output "tokyo_syslog_ip" {
+  value = aws_instance.syslog_tokyo.private_ip
+}
+output "tokyo_syslog_region" {
+  value = var.tokyo_config.region
+}
